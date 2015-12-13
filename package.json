@@ -1,0 +1,22 @@
+{
+  "name": "waterrower-ble",
+  "version": "0.1.0",
+  "description": "A Cycling Power Bluetooth LE Service for the WaterRower S4",
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "author": {
+    "name": "Bruno Fernandez-Ruiz",
+    "url" : "https://github.com/olympum"
+  },
+  "dependencies": {
+    "bleno": ">0.1.4",
+    "serialport": "2.0.5",
+    "q": "1.4.1"
+  }
+}
