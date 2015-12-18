@@ -5,6 +5,8 @@ var S4 = require('./s4');
 
 /// init BLE
 
+process.env['BLENO_DEVICE_NAME'] = 'WaterRower S4';
+
 var primaryService = new CyclingPowerService();
 var hrmService = new HrmService();
 
@@ -12,8 +14,7 @@ bleno.on('stateChange', function(state) {
   console.log('on -> stateChange: ' + state);
 
   if (state === 'poweredOn') {
-    bleno.startAdvertising('WaterRower S4 Power Meter', [primaryService.uuid]);
-    bleno.startAdvertising('WaterRower S4 HR', [hrmService.uuid]);
+    bleno.startAdvertising('WaterRower S4', [primaryService.uuid, hrmService.uuid]);
   } else {
     bleno.stopAdvertising();
   }
