@@ -36,7 +36,7 @@ var CyclingPowerMeasurementCharacteristic = function() {
 util.inherits(CyclingPowerMeasurementCharacteristic, Characteristic);
 
 CyclingPowerMeasurementCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
-  console.log('onSubscribe: ' + updateValueCallback);
+  console.log('onSubscribe');
   this._updateValueCallback = updateValueCallback;
 };
 

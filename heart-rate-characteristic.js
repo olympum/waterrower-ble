@@ -21,7 +21,7 @@ var HeartRateCharacteristic = function() {
 util.inherits(HeartRateCharacteristic, Characteristic);
 
 HeartRateCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
-  console.log('onSubscribe: ' + updateValueCallback);
+  console.log('onSubscribe');
   this._updateValueCallback = updateValueCallback;
 };
 

@@ -13,3 +13,28 @@ In order for this BLE adapter to work:
 * The computer needs a BLE adapter. All modern Apple Mac have this.
 
 As a cool weekend project to the reader, you could put this code in a Raspberry Pi and have the S4 always on BLE.
+
+## Raspberry Pi ##
+
+Install bluetooth:
+
+```
+$ sudo apt-get install bluetooth bluez libbluetooth-dev libudev-dev
+```
+
+There is an issue with `node-bleno` and `bluez 5.x`. Until bleno is updated
+we need to shut down the bluetooth daemon:
+
+```
+pi@raspberrypi ~ $ bluetoothd --version
+pi@raspberrypi ~ $ sudo /etc/init.d/bluetooth stop
+[ ok ] Stopping bluetooth (via systemctl): bluetooth.service.
+pi@raspberrypi ~ $ sudo hciconfig hci0 up
+```
+
+Install node:
+
+```
+wget https://node-arm.herokuapp.com/node_archive_armhf.deb
+sudo dpkg -i node_archive_armhf.deb
+```
