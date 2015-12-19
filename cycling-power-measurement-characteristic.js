@@ -63,7 +63,7 @@ CyclingPowerMeasurementCharacteristic.prototype.notify = function(event) {
 
   if ('watts' in event) {
     var watts = event.watts;
-    console.log("power: " + watts);
+    //console.log("power: " + watts);
     buffer.writeInt16LE(watts, 2);
   }
 
@@ -74,19 +74,19 @@ CyclingPowerMeasurementCharacteristic.prototype.notify = function(event) {
     // var revs = cadence * ellapsed_millis;
     // this.revolutions += revs;
     // console.log("revolutions: " + Math.floor(this.revolutions));
-    console.log("stroke_count: " + event.stroke_count);
+    //console.log("stroke_count: " + event.stroke_count);
     buffer.writeUInt16LE(event.stroke_count, 4);
 
     var now = Date.now();
     var now_1024 = Math.floor(now*1e3/1024);
     var event_time = now_1024 % 65536; // rolls over every 64 seconds
-    console.log("event time: " + event_time);
+    //console.log("event time: " + event_time);
     this.last = now;
     buffer.writeUInt16LE(event_time, 6);
   }
 
   if (this._updateValueCallback) {
-    console.log('notifying');
+    //console.log('notifying');
     this._updateValueCallback(buffer);
   }
 }
