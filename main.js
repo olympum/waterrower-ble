@@ -68,4 +68,15 @@ rower.findPort().then(function(comName) {
   });
 }, function(reason) {
   console.log("[Init] error: " + reason);
+  // console.log("Faking test data");
+  // var stroke_count = 0;
+  // var test = function() {
+  //   var bpm = Math.floor(Math.random() * 10 + 120);
+  //   hrmService.notify({'heart_rate': bpm});
+  //   var watts = Math.floor(Math.random() * 10 + 120);
+  //   stroke_count = stroke_count + 1;
+  //   primaryService.notify({'watts': watts, 'stroke_count': stroke_count});
+  //   setTimeout(test, 678);
+  // }
+  // test();
 });
