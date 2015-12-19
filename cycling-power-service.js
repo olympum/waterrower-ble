@@ -19,10 +19,9 @@ function CyclingPowerService() {
           new CyclingSensorLocationCharacteristic()
       ]
   });
-}
-
-CyclingPowerService.prototype.notify = function(event) {
-  this.pm.notify(event);
+  this.notify = function(event) {
+    this.pm.notify(event);
+  };
 }
 
 util.inherits(CyclingPowerService, BlenoPrimaryService);

@@ -15,10 +15,9 @@ function HrmService() {
           this.hrc
       ]
   });
-}
-
-HrmService.prototype.notify = function(event) {
-  this.hrc.notify(event);
+  this.notify = function(event) {
+    this.hrc.notify(event);
+  }
 }
 
 util.inherits(HrmService, BlenoPrimaryService);
