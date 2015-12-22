@@ -86,7 +86,6 @@ CyclingPowerMeasurementCharacteristic.prototype.notify = function(event) {
   }
 
   if (this._updateValueCallback) {
-    //console.log('notifying');
     this._updateValueCallback(buffer);
   }
 }
