@@ -1,36 +1,29 @@
-var bleno = require('bleno');
-var CyclingPowerService = require('./cycling-power-service');
-var HrmService = require('./hrm-service');
 var S4 = require('./s4');
 
-/// init BLE
+var news = [
+  "Borussia Dortmund wins German championship",
+  "Tornado warning for the Bay Area",
+  "More rain for the weekend",
+  "Android tablets take over the world",
+  "iPad2 sold out",
+  "Nation's rappers down to last two samples"
+];
 
-process.env['BLENO_DEVICE_NAME'] = 'WaterRower S4';
-
-var primaryService = new CyclingPowerService();
-var hrmService = new HrmService();
-
-bleno.on('stateChange', function(state) {
-  console.log('on -> stateChange: ' + state);
-
-  if (state === 'poweredOn') {
-    bleno.startAdvertising('WaterRower S4', [primaryService.uuid, hrmService.uuid]);
-  } else {
-    bleno.stopAdvertising();
-  }
+var dgram = require('dgram');
+var server = dgram.createSocket("udp4");
+server.bind( function() {
+  server.setBroadcast(true)
+  server.setMulticastTTL(128);
 });
 
-bleno.on('advertisingStart', function(error) {
-  console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
 
-  if (!error) {
-    bleno.setServices([primaryService, hrmService], function(error){
-      console.log('setServices: '  + (error ? 'error ' + error : 'success'));
-    });
-  }
-});
+function broadcast(event) {
+  var str = JSON.stringify(event);
+  var message = new Buffer(str);
+  server.send(message, 0, message.length, 5007, "224.1.1.1");
+  console.log("Sent " + message + " to the wire...");
+}
 
-/// init S4
 
 var rower = new S4();
 
@@ -56,13 +49,13 @@ rower.findPort().then(function(comName) {
               'stroke_count': stroke_count
             };
             console.log(e);
-            primaryService.notify(e);
+            broadcast(e);
           } else if ('watts' in event) {
             if (event.watts > 0) {
               watts = event.watts;
             }
           } else if ('heart_rate' in event) {
-            hrmService.notify(event);
+            broadcast(event);
           }
       });
   });
@@ -72,10 +65,10 @@ rower.findPort().then(function(comName) {
   var stroke_count = 0;
   var test = function() {
     var bpm = Math.floor(Math.random() * 10 + 120);
-    hrmService.notify({'heart_rate': bpm});
+    broadcast({'heart_rate': bpm});
     var watts = Math.floor(Math.random() * 10 + 120);
     stroke_count = stroke_count + 1;
-    primaryService.notify({'watts': watts, 'stroke_count': stroke_count});
+    broadcast({'watts': watts, 'stroke_count': stroke_count});
     setTimeout(test, 678);
   };
   test();
