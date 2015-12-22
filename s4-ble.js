@@ -13,8 +13,14 @@ client.on('listening', function () {
     client.addMembership('224.0.0.1');
 });
 
+var last_id = 0;
 client.on('message', function (message, remote) {
   var event = JSON.parse(message);
+  if (event.id > last_id) {
+    last_id = event.id;
+  } else {
+    return;
+  }
   var service = null;
   if ('watts' in event) {
     service = primaryService;
