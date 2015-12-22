@@ -20,7 +20,7 @@ server.bind( function() {
 function broadcast(event) {
   var str = JSON.stringify(event);
   var message = new Buffer(str);
-  server.send(message, 0, message.length, 5007, "224.1.1.1");
+  server.send(message, 0, message.length, 5007, "224.0.0.1");
   console.log("Sent " + message + " to the wire...");
 }
 
