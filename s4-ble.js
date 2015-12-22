@@ -10,7 +10,7 @@ client.on('listening', function () {
     console.log('UDP Client listening on ' + address.address + ":" + address.port);
     client.setBroadcast(true)
     client.setMulticastTTL(128);
-    client.addMembership('224.1.1.1');
+    client.addMembership('224.0.0.1');
 });
 
 client.on('message', function (message, remote) {
