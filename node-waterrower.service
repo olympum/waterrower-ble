@@ -1,0 +1,12 @@
+[Service]
+ExecStart=/usr/local/bin/node s4-usb.js
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=node-waterrower
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/waterrower-ble
+
+[Install]
+WantedBy=multi-user.target

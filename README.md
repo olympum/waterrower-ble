@@ -35,6 +35,23 @@ pi@raspberrypi ~ $ sudo hciconfig hci0 up
 Install node:
 
 ```
-wget https://node-arm.herokuapp.com/node_archive_armhf.deb
-sudo dpkg -i node_archive_armhf.deb
+curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
+sudo apt-get install --yes nodejs
+sudo ln -s /usr/bin/nodejs /usr/bin/node
 ```
+
+Install service:
+
+```
+sudo cp node-waterrower.service /etc/systemd/services/node-waterrower.service
+sudo systemctl daemon-reload
+sudo systemctl start node-waterrower
+sudo systemctl enable node-waterrower
+```
+
+Check status in syslog:
+
+```
+tail -f /var/log/syslog
+```
+
