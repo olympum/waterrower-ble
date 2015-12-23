@@ -17,6 +17,7 @@
   "dependencies": {
     "bleno": ">0.1.4",
     "serialport": "2.0.5",
+    "usb": "1.1.1",
     "q": "1.4.1"
   }
 }
