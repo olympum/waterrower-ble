@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "description": "A Cycling Power Bluetooth LE Service for the WaterRower S4",
   "main": "index.js",
+  "license": "MIT",
+  "repository": "olympum/waterrower-ble",
   "engines": {
     "node": ">=0.10"
   },
