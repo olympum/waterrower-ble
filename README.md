@@ -129,7 +129,7 @@ When done, unplug the USB cable from the Pi, otherwise the WR will not power off
 
 ## On Bluetooth LE and the Raspberry Pi ##
 
-`node-bleno` is supporting `bluez` version 4.99, but bluez 5 is not standard in Debian and Ubuntu, so until bleno is updated to 5.x we need to shut down the bluetooth daemon:
+`node-bleno` is supporting `bluez` version 4.99, but `bluez` 5.x is now standard in Debian and Ubuntu, so until `bleno` is updated to support 5.x we need to shut down the bluetooth daemon:
 
 ```
 pi@raspberrypi ~ $ bluetoothd --version
