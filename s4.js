@@ -270,11 +270,14 @@ S4.prototype.exit = function () {
         if (this.writer) {
             clearInterval(this.writer);
         }
-        this.event.resolve("EXITED");
+        if (this.event) {
+          this.event.resolve("EXITED");
+        }
     }
 };
 
-S4.startRower = function(callback) {
+S4.prototype.startRower = function(callback) {
+  var rower = this;
   return function() {
     rower.findPort().then(function(comName) {
       console.log("[Init] Found WaterRower S4 on com port: " + comName);
@@ -314,11 +317,14 @@ S4.startRower = function(callback) {
   };
 };
 
-S4.stopRower = function() {
-  rower.exit();
+S4.prototype.stopRower = function() {
+  var self = this;
+  return function() {
+    self.exit();
+  };
 };
 
-S4.fakeRower = function(callback) {
+S4.prototype.fakeRower = function(callback) {
   console.log("[Init] Faking test data");
   var stroke_count = 0;
   var id = 0;

@@ -12,12 +12,13 @@ var main_ble = function() {
 var main_usb = function(test_mode) {
   var broadcaster = new network.MessageBroadcaster();
   broadcaster.start();
+  var rower = new S4();
 
   if (test_mode) {
-    S4.fakeRower(broadcaster.send);
+    rower.fakeRower(broadcaster.send);
   } else {
     var peripheral = new usb.UsbPeripheral();
-    peripheral.monitor_wr(S4.startRower(broadcaster.send), S4.stopRower);
+    peripheral.monitor_wr(rower.startRower(broadcaster.send), rower.stopRower(rower));
     console.log('[Init] Awaiting WaterRower S4.2 to be connected to USB port');
   }
 };
@@ -30,7 +31,7 @@ var main = function() {
     main_ble();
   } else {
     // TODO: unified mode without UDP
-    console.log("Integrated mode not implemented yet: use --test, --ble or --usb command line flags");    
+    console.log("Integrated mode not implemented yet: use --test, --ble or --usb command line flags");
   }
 };
 

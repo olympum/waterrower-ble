@@ -20,14 +20,14 @@ var UsbPeripheral = function() {
     usb.on('attach', function(device) {
       if (wr_usb_event(device)) {
         console.log("[Init] WaterRower-S4.2 Connected to USB hub controller");
-        startRower;
+        startRower();
       }
     });
 
     usb.on('detach', function(device) {
       if (wr_usb_event(device)) {
         console.log("[End] WaterRower-S4.2 Disconnected from USB hub controller");
-        stopRower;
+        stopRower();
       }
     });
   };
