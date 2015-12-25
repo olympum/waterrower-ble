@@ -50,7 +50,7 @@ var MessageBroadcaster = function() {
     var str = JSON.stringify(event);
     var message = new Buffer(str);
     self.server.send(message, 0, message.length, 5007, "224.0.0.1");
-    console.log("[Run] Sent " + message + " to 224.0.0.1:5007");
+    console.log("[OUT] 224.0.0.1:5007 - " + message);
   };
 };
 

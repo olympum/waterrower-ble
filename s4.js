@@ -285,31 +285,31 @@ S4.prototype.startRower = function(callback) {
       var stroke_count = 0;
       var watts = 0;
       rower.open(comName).then(function() {
-          rower.start().then(function(string) {
-              console.log('[End] Workout ended successfully ...' + string);
-          }, function(string) {
-              console.log('[End] Workout failed ...' + string);
-          }, function(event) {
-              console.log('[Start] Started broadcasing WR data');
-              //console.log(event);
-              if ('stroke_rate' in event) {
-                stroke_rate = event.stroke_rate;
-              } else if ('stroke_count' in event
-                  && event.stroke_count > stroke_count) {
-                stroke_count= event.stroke_count;
-                var e = {
-                  'watts': watts,
-                  'stroke_count': stroke_count
-                };
-                callback(e);
-              } else if ('watts' in event) {
-                if (event.watts > 0) {
-                  watts = event.watts;
-                }
-              } else if ('heart_rate' in event) {
-                callback(event);
+        console.log('[Start] Start broadcasing WR data');
+        rower.start().then(function(string) {
+            console.log('[End] Workout ended successfully ...' + string);
+        }, function(string) {
+            console.log('[End] Workout failed ...' + string);
+        }, function(event) {
+            //console.log(event);
+            if ('stroke_rate' in event) {
+              stroke_rate = event.stroke_rate;
+            } else if ('stroke_count' in event
+                && event.stroke_count > stroke_count) {
+              stroke_count= event.stroke_count;
+              var e = {
+                'watts': watts,
+                'stroke_count': stroke_count
+              };
+              callback(e);
+            } else if ('watts' in event) {
+              if (event.watts > 0) {
+                watts = event.watts;
               }
-          });
+            } else if ('heart_rate' in event) {
+              callback(event);
+            }
+        });
       });
     }, function(reason) {
       console.log("[Init] error: " + reason);
