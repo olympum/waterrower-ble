@@ -1,10 +1,16 @@
-var main_ble = function() {
+var main_ble = function(test_mode) {
   var peripheral = require('./bluetooth-peripheral');
-  var network = require('./network');
-
   var ble = new peripheral.BluetoothPeripheral();
-  var listener = new network.MessageListener(ble.notify);
-  listener.start();
+
+  if (test_mode) {
+    var S4 = require('./s4');
+    var rower = new S4();
+    rower.fakeRower(ble.notify);
+  } else {
+    var network = require('./network');
+    var listener = new network.MessageListener(ble.notify);
+    listener.start();
+  }
 };
 
 var main_usb = function(test_mode) {
@@ -55,11 +61,11 @@ var main_full = function(test_mode) {
 
 var main = function() {
   var run_mode = process.argv[2];
-  var test_mode = process.argv[3];
+  var test_mode = process.argv[3] === '--test';
   if (run_mode === 'usb') {
-    main_usb(test_mode === '--test');
+    main_usb(test_mode);
   } else if (run_mode === 'ble') {
-    main_ble();
+    main_ble(test_mode);
   } else {
     main_full(run_mode === '--test');
   }
