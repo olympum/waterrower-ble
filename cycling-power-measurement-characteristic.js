@@ -28,8 +28,6 @@ var CyclingPowerMeasurementCharacteristic = function() {
     ]
   });
 
-  //this.revolutions = 0;
-  this.last = 0;
   this._updateValueCallback = null;
 };
 
@@ -46,9 +44,6 @@ CyclingPowerMeasurementCharacteristic.prototype.onUnsubscribe = function() {
 };
 
 CyclingPowerMeasurementCharacteristic.prototype.notify = function(event) {
-  if (this.last == 0) {
-    this.last = Date.now();
-  }
   var buffer = new Buffer(8);
   // flags
   // 00000001 - 1   - 0x001 - Pedal Power Balance Present
@@ -68,12 +63,6 @@ CyclingPowerMeasurementCharacteristic.prototype.notify = function(event) {
   }
 
   if ('stroke_count' in event) {
-    // var cadence = event.stroke_rate/60e3;
-    // var now = Date.now();
-    // var ellapsed_millis = now - this.last;
-    // var revs = cadence * ellapsed_millis;
-    // this.revolutions += revs;
-    // console.log("revolutions: " + Math.floor(this.revolutions));
     //console.log("stroke_count: " + event.stroke_count);
     buffer.writeUInt16LE(event.stroke_count, 4);
 
@@ -81,7 +70,6 @@ CyclingPowerMeasurementCharacteristic.prototype.notify = function(event) {
     var now_1024 = Math.floor(now*1e3/1024);
     var event_time = now_1024 % 65536; // rolls over every 64 seconds
     //console.log("event time: " + event_time);
-    this.last = now;
     buffer.writeUInt16LE(event_time, 6);
   }
 
