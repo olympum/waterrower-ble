@@ -14,8 +14,7 @@ var Characteristic = bleno.Characteristic;
 var CyclingPowerFeatureCharacteristic = function() {
   CyclingPowerFeatureCharacteristic.super_.call(this, {
     uuid: '2A65',
-    properties: ['read'],
-    value: new Buffer([0])
+    properties: ['read']
   });
 };
 
@@ -23,7 +22,13 @@ util.inherits(CyclingPowerFeatureCharacteristic, Characteristic);
 
 CyclingPowerFeatureCharacteristic.prototype.onReadRequest = function(offset, callback) {
   // return hardcoded value
-  callback(this.RESULT_SUCCESS, new Buffer([0]));
+  // 0001 - 0x01 - pedal power balance
+  // 0010 - 0x02 - torque
+  // 0100 - 0x04 - wheel revolutions
+  // 1000 - 0x08 - crank revolutions
+  var value = new Buffer(4);
+  value.writeUInt32LE(0x08);
+  callback(this.RESULT_SUCCESS, value);
 };
 
 module.exports = CyclingPowerFeatureCharacteristic;
