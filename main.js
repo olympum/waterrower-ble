@@ -31,33 +31,37 @@ var main_usb = function(test_mode) {
   }
 };
 
-var main_full = function() {
+var main_full = function(test_mode) {
   var peripheral = require('./bluetooth-peripheral');
   var S4 = require('./s4');
   var usb = require('./usb-peripheral');
 
   var ble = new peripheral.BluetoothPeripheral();
   var rower = new S4();
-  // monitor USB attach and detach
-  var peripheral = new usb.UsbPeripheral();
-  peripheral.monitor_wr(rower.startRower(ble.notify), rower.stopRower(rower));
+  if (test_mode) {
+    rower.fakeRower(ble.notify);
+  } else {
+    // monitor USB attach and detach
+    var peripheral = new usb.UsbPeripheral();
+    peripheral.monitor_wr(rower.startRower(ble.notify), rower.stopRower(rower));
 
-  rower.findPort().then(function() {
-    rower.startRower(ble.notify)();
-  }, function() {
-    console.log('[Init] Awaiting WaterRower S4.2 to be connected to USB port');
-  });
-
+    rower.findPort().then(function() {
+      rower.startRower(ble.notify)();
+    }, function() {
+      console.log('[Init] Awaiting WaterRower S4.2 to be connected to USB port');
+    });
+  }
 };
 
 var main = function() {
-  var mode = process.argv[2];
-  if (mode === '--test' || mode === '--usb') {
-    main_usb(mode === '--test');
-  } else if (mode === '--ble') {
+  var run_mode = process.argv[2];
+  var test_mode = process.argv[3];
+  if (run_mode === 'usb') {
+    main_usb(test_mode === '--test');
+  } else if (run_mode === 'ble') {
     main_ble();
   } else {
-    main_full();
+    main_full(run_mode === '--test');
   }
 };
 
