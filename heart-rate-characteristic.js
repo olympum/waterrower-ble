@@ -31,6 +31,11 @@ HeartRateCharacteristic.prototype.onUnsubscribe = function() {
 };
 
 HeartRateCharacteristic.prototype.notify = function(event) {
+  if (!('heart_rate' in event)) {
+    // ignore
+    return;
+  }
+
   var bpm = event.heart_rate;
   //console.log("bpm: " + bpm);
   var value = new Buffer([0, bpm]);

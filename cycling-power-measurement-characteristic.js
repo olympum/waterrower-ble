@@ -44,6 +44,10 @@ CyclingPowerMeasurementCharacteristic.prototype.onUnsubscribe = function() {
 };
 
 CyclingPowerMeasurementCharacteristic.prototype.notify = function(event) {
+  if (!('watts' in event) && !('stroke_count' in event)) {
+    // ignore events with no power and no crank data
+    return;
+  }
   var buffer = new Buffer(8);
   // flags
   // 00000001 - 1   - 0x001 - Pedal Power Balance Present
