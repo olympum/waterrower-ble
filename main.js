@@ -17,9 +17,15 @@ var main_usb = function(test_mode) {
   if (test_mode) {
     rower.fakeRower(broadcaster.send);
   } else {
+    // monitor USB attach and detach
     var peripheral = new usb.UsbPeripheral();
     peripheral.monitor_wr(rower.startRower(broadcaster.send), rower.stopRower(rower));
-    console.log('[Init] Awaiting WaterRower S4.2 to be connected to USB port');
+
+    rower.findPort().then(function() {
+      rower.startRower(broadcaster.send);
+    }, function() {
+      console.log('[Init] Awaiting WaterRower S4.2 to be connected to USB port');
+    });
   }
 };
 
