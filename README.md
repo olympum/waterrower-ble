@@ -252,7 +252,7 @@ Now we are ready to start working hard. Once installed on both the Raspberry Pi 
 1. On the Zwift computer, start the BLE peripheral:
     ```
     cd waterrower-ble
-    node s4-ble.js
+    node main.js --ble
     ```
 
 1. On the phone, open the Zwift app.

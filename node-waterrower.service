@@ -1,5 +1,5 @@
 [Service]
-ExecStart=/usr/local/bin/node s4-usb.js
+ExecStart=/usr/local/bin/node main.js --usb
 Restart=always
 StandardOutput=syslog
 StandardError=syslog

@@ -274,4 +274,63 @@ S4.prototype.exit = function () {
     }
 };
 
+S4.startRower = function(callback) {
+  return function() {
+    rower.findPort().then(function(comName) {
+      console.log("[Init] Found WaterRower S4 on com port: " + comName);
+      var stroke_rate = 0;
+      var stroke_count = 0;
+      var watts = 0;
+      rower.open(comName).then(function() {
+          rower.start().then(function(string) {
+              console.log('[End] Workout ended successfully ...' + string);
+          }, function(string) {
+              console.log('[End] Workout failed ...' + string);
+          }, function(event) {
+              console.log('[Start] Started broadcasing WR data');
+              //console.log(event);
+              if ('stroke_rate' in event) {
+                stroke_rate = event.stroke_rate;
+              } else if ('stroke_count' in event
+                  && event.stroke_count > stroke_count) {
+                stroke_count= event.stroke_count;
+                var e = {
+                  'watts': watts,
+                  'stroke_count': stroke_count
+                };
+                callback(e);
+              } else if ('watts' in event) {
+                if (event.watts > 0) {
+                  watts = event.watts;
+                }
+              } else if ('heart_rate' in event) {
+                callback(event);
+              }
+          });
+      });
+    }, function(reason) {
+      console.log("[Init] error: " + reason);
+    });
+  };
+};
+
+S4.stopRower = function() {
+  rower.exit();
+};
+
+S4.fakeRower = function(callback) {
+  console.log("[Init] Faking test data");
+  var stroke_count = 0;
+  var id = 0;
+  var test = function() {
+    var bpm = Math.floor(Math.random() * 10 + 120);
+    callback({'heart_rate': bpm});
+    var watts = Math.floor(Math.random() * 10 + 120);
+    stroke_count = stroke_count + 1;
+    callback({'watts': watts, 'stroke_count': stroke_count});
+    setTimeout(test, 666);
+  };
+  test();
+};
+
 module.exports = S4
