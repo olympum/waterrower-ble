@@ -51,15 +51,15 @@ CyclingPowerMeasurementCharacteristic.prototype.notify = function(event) {
   }
   var buffer = new Buffer(8);
   // flags
-  // 00000001 - Pedal Power Balance Present
-  // 00000010 - Pedal Power Balance Reference
-  // 00000100 - Accumulated Torque Present
-  // 00001000 - Accumulated Torque Source
-  // 00010000 - Wheel Revolution Data Present
-  // 00100000 - Crank Revolution Data Present
-  // 01000000 - Extreme Force Magnitudes Present
-  // 10000000 - Extreme Torque Magnitudes Present
-  buffer.writeUInt16LE(32, 0);
+  // 00000001 - 1   - 0x001 - Pedal Power Balance Present
+  // 00000010 - 2   - 0x002 - Pedal Power Balance Reference
+  // 00000100 - 4   - 0x004 - Accumulated Torque Present
+  // 00001000 - 8   - 0x008 - Accumulated Torque Source
+  // 00010000 - 16  - 0x010 - Wheel Revolution Data Present
+  // 00100000 - 32  - 0x020 - Crank Revolution Data Present
+  // 01000000 - 64  - 0x040 - Extreme Force Magnitudes Present
+  // 10000000 - 128 - 0x080 - Extreme Torque Magnitudes Present
+  buffer.writeUInt16LE(0x020, 0);
 
   if ('watts' in event) {
     var watts = event.watts;
