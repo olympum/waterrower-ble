@@ -22,7 +22,7 @@ var main_usb = function(test_mode) {
     peripheral.monitor_wr(rower.startRower(broadcaster.send), rower.stopRower(rower));
 
     rower.findPort().then(function() {
-      rower.startRower(broadcaster.send);
+      rower.startRower(broadcaster.send)();
     }, function() {
       console.log('[Init] Awaiting WaterRower S4.2 to be connected to USB port');
     });
