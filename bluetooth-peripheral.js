@@ -29,7 +29,7 @@ var BluetoothPeripheral = function() {
   });
 
   this.notify = function(event) {
-    console.log("[BLE] " + JSON.stringify(event));
+    //console.log("[BLE] " + JSON.stringify(event));
     var service = null;
     if ('watts' in event) {
       service = self.primaryService;

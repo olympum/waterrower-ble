@@ -19,7 +19,7 @@ MessageListener.prototype.start = function() {
   });
 
   self.client.on('message', function (message, remote) {
-    console.log("[IN] " + remote.address + ':' + remote.port +' - ' + message);
+    //console.log("[IN] " + remote.address + ':' + remote.port +' - ' + message);
 
     var event = JSON.parse(message);
     if (event.id > self.last_id) {
@@ -50,7 +50,7 @@ var MessageBroadcaster = function() {
     var str = JSON.stringify(event);
     var message = new Buffer(str);
     self.server.send(message, 0, message.length, 5007, "224.0.0.1");
-    console.log("[OUT] 224.0.0.1:5007 - " + message);
+    //console.log("[OUT] 224.0.0.1:5007 - " + message);
   };
 };
 
