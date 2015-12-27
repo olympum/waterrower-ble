@@ -29,10 +29,9 @@ var BluetoothPeripheral = function() {
   });
 
   this.notify = function(event) {
-    console.log("[BLE] %j", event);
+    //  console.log("[BLE] " + JSON.stringify(event));
     self.primaryService.notify(event);
     self.hrmService.notify(event);
-
     if (!('watts' in event) && !('heart_rate' in event)) {
       console.log("unrecognized event: %j", event);
     }
