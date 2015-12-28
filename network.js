@@ -38,6 +38,7 @@ module.exports.MessageListener = MessageListener;
 
 var MessageBroadcaster = function() {
   this.server = dgram.createSocket("udp4");
+  this.last_id = Date.now();
   var self = this;
   this.start = function() {
     self.server.bind( function() {
@@ -46,7 +47,7 @@ var MessageBroadcaster = function() {
     });
   };
   this.send = function(event) {
-    event.id = Date.now();
+    event.id = self.last_id++;
     var str = JSON.stringify(event);
     var message = new Buffer(str);
     self.server.send(message, 0, message.length, 5007, "224.0.0.1");
