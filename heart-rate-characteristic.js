@@ -2,6 +2,7 @@ var util = require('util');
 var os = require('os');
 var exec = require('child_process').exec;
 var bleno = require('bleno');
+var debug = require('debug')('hrm');
 
 var Descriptor = bleno.Descriptor;
 var Characteristic = bleno.Characteristic;
@@ -21,12 +22,12 @@ var HeartRateCharacteristic = function() {
 util.inherits(HeartRateCharacteristic, Characteristic);
 
 HeartRateCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
-  console.log('onSubscribe');
+  console.log('[BLE] client subscribed to HRM');
   this._updateValueCallback = updateValueCallback;
 };
 
 HeartRateCharacteristic.prototype.onUnsubscribe = function() {
-  console.log('onUnsubscribe');
+  console.log('[BLE] client unsubscribed from HRM');
   this._updateValueCallback = null;
 };
 
@@ -37,10 +38,9 @@ HeartRateCharacteristic.prototype.notify = function(event) {
   }
 
   var bpm = event.heart_rate;
-  //console.log("bpm: " + bpm);
+  debug("bpm: " + bpm);
   var value = new Buffer([0, bpm]);
   if (this._updateValueCallback) {
-    //console.log('notifying');
     this._updateValueCallback(value);
   }
 }

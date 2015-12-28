@@ -1,6 +1,7 @@
 var util = require('util');
 var os = require('os');
 var exec = require('child_process').exec;
+var debug = require('debug')('pm');
 
 var bleno = require('bleno');
 
@@ -34,12 +35,12 @@ var CyclingPowerMeasurementCharacteristic = function() {
 util.inherits(CyclingPowerMeasurementCharacteristic, Characteristic);
 
 CyclingPowerMeasurementCharacteristic.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
-  console.log('onSubscribe');
+  console.log('[BLE] client subscribed to PM');
   this._updateValueCallback = updateValueCallback;
 };
 
 CyclingPowerMeasurementCharacteristic.prototype.onUnsubscribe = function() {
-  console.log('onUnsubscribe');
+  console.log('[BLE] client unsubscribed from PM');
   this._updateValueCallback = null;
 };
 
@@ -62,18 +63,18 @@ CyclingPowerMeasurementCharacteristic.prototype.notify = function(event) {
 
   if ('watts' in event) {
     var watts = event.watts;
-    //console.log("power: " + watts);
+    debug("power: " + watts);
     buffer.writeInt16LE(watts, 2);
   }
 
   if ('stroke_count' in event) {
-    //console.log("stroke_count: " + event.stroke_count);
+    debug("stroke_count: " + event.stroke_count);
     buffer.writeUInt16LE(event.stroke_count, 4);
 
     var now = Date.now();
     var now_1024 = Math.floor(now*1e3/1024);
     var event_time = now_1024 % 65536; // rolls over every 64 seconds
-    //console.log("event time: " + event_time);
+    debug("event time: " + event_time);
     buffer.writeUInt16LE(event_time, 6);
   }
 

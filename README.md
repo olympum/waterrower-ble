@@ -263,3 +263,42 @@ Now we are ready to start working hard. Once installed on both the Raspberry Pi 
 
 When done, unplug the USB cable from the Pi, otherwise the WR S4
 monitor will not power off, and it will drain the batteries.
+
+## Debugging ##
+
+Use the `DEBUG` environment variable to specify the component to produce debug log output on:
+
+* `ble`
+* `pm`
+* `hrm`
+* `usb`
+* `network`
+
+For example,
+
+```
+DEBUG=ble,network node . ble
+```
+
+would produce:
+
+```
+$ DEBUG=network,ble node . ble
+  ble [BLE] {"heart_rate":0,"watts":0,"stroke_count":0} +0ms
+UDP Client listening on 0.0.0.0:5007
+  network [IN] 192.168.1.87:49470 - {"heart_rate":122,"id":1451303405515} +161ms
+  ble [BLE] {"heart_rate":122,"id":1451303405515} +2ms
+  network [IN] 192.168.1.87:49470 - {"watts":122,"stroke_count":24,"id":1451303405516} +0ms
+  ble [BLE] {"watts":122,"stroke_count":24,"id":1451303405516} +0ms
+BLE state change: poweredOn
+  ble advertisingStart: success +65ms
+  ble setServices: success +2ms
+  network [IN] 192.168.1.87:49470 - {"heart_rate":122,"id":1451303405515} +15ms
+  network [IN] 192.168.1.87:49470 - {"watts":122,"stroke_count":24,"id":1451303405516} +0ms
+  network [IN] 192.168.1.87:49470 - {"heart_rate":127,"id":1451303405517} +585ms
+  ble [BLE] {"heart_rate":127,"id":1451303405517} +0ms
+  network [IN] 192.168.1.87:49470 - {"watts":129,"stroke_count":25,"id":1451303405518} +0ms
+  ble [BLE] {"watts":129,"stroke_count":25,"id":1451303405518} +0ms
+  network [IN] 192.168.1.87:49470 - {"heart_rate":127,"id":1451303405517} +115ms
+  network [IN] 192.168.1.87:49470 - {"watts":129,"stroke_count":25,"id":1451303405518} +0ms
+```
