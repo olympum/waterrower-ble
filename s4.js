@@ -291,7 +291,6 @@ S4.prototype.startRower = function(callback) {
         }, function(string) {
             console.log('[End] Workout failed ...' + string);
         }, function(event) {
-            //console.log(event);
             if ('stroke_rate' in event) {
               stroke_rate = event.stroke_rate;
             } else if ('stroke_count' in event
