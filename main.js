@@ -1,6 +1,6 @@
 var main_ble = function(test_mode) {
-  var peripheral = require('./bluetooth-peripheral');
-  var ble = new peripheral.BluetoothPeripheral();
+  var peripheral = require('ble-cycling-power');
+  var ble = new peripheral.BluetoothPeripheral('WaterRower S4');
 
   if (test_mode) {
     var S4 = require('./s4');
