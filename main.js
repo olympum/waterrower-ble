@@ -38,11 +38,11 @@ var main_usb = function(test_mode) {
 };
 
 var main_full = function(test_mode) {
-  var peripheral = require('./bluetooth-peripheral');
+  var peripheral = require('bluetooth-peripheral');
   var S4 = require('./s4');
   var usb = require('./usb-peripheral');
 
-  var ble = new peripheral.BluetoothPeripheral();
+  var ble = new peripheral.BluetoothPeripheral('WaterRower S4');
   var rower = new S4();
   if (test_mode) {
     rower.fakeRower(ble.notify);
