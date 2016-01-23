@@ -298,7 +298,7 @@ S4.prototype.startRower = function(callback) {
               stroke_count= event.stroke_count;
               var e = {
                 'watts': watts,
-                'stroke_count': stroke_count
+                'rev_count': stroke_count
               };
               callback(e);
             } else if ('watts' in event) {
@@ -332,7 +332,7 @@ S4.prototype.fakeRower = function(callback) {
     callback({'heart_rate': bpm});
     var watts = Math.floor(Math.random() * 10 + 120);
     stroke_count = stroke_count + 1;
-    callback({'watts': watts, 'stroke_count': stroke_count});
+    callback({'watts': watts, 'rev_count': stroke_count});
     setTimeout(test, 666);
   };
   test();
