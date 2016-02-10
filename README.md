@@ -23,6 +23,15 @@ no clue if or how this works on Windows, you are on your own there.
 I am assuming throughout that you are running as `pi:pi` and have `sudo`
 privileges.
 
+Before anything else, let's make sure we are up to date:
+
+```
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo rpi-update # upgrade firmware (for BLE)
+$ sudo reboot
+```
+
 First, we plugin the USB Bluetooth dongle and install bluetooth and bluez
 utils:
 
@@ -103,27 +112,41 @@ Done! We are ready to row.
 ## Rowing with Power
 
 Now we are ready to start a good workout on the erg. Once installed on the
-Raspberry Pi, the sequence to up and running is the following:
+Raspberry Pi, the sequence to get up and running is the following:
 
-1. If off, switch on the Raspberry Pi. FWIW I have it always on.
-1. Switch on the WR S4. You will hear a beep.
-1. Connect the WR S4 USB cable to the Raspberry Pi. You should hear another beep.
-1. On a device with BLE, e.g. iPhone, use an app to connect to the "WaterRower S4" peripheral.
+1. If off, switch on the Raspberry Pi (I leave it always on).
+1. Switch on the WR S4. You should hear a beep.
+1. Connect the WR S4 USB cable to the Raspberry Pi. You should hear another
+beep.
+1. On a device with BLE, e.g. iPhone, pair to the "WaterRower S4"
+sensor using your favorite app. I normally use the Wahoo Fitness app.
+1. Once done, and in order to save the S4 batteries, unplug the USB cable from
+the Pi, otherwise the WR S4 monitor will not power off.
 
-To get it running on Zwift:
+## Rowing on Zwift
 
-1. On the phone, open the Zwift app.
-1. On the computer, open the Zwift app. Enter your credentials and ignore the missing ANT+ dongle warning.
-1. Once you are signed into Zwift, you should see pairing sensor screen. The bluetooth phone next to the ANT+ sign should be pulsing. If has a yellow warning or if it's greyed out, ensure your phone is in the same WIFI network as the computer and reset bluetooth (switch if off and back on again).
-1. I've had trouble pairing bluetooth devices before starting the ride, so instead of pairing right now, we are going to press ESC to bypass it, and then start the ride with `Just Ride` (or join ...).
-1. Once in the game, press `A` to get back to the pairing screen.
-1. Pair the heart rate monitor, the power meter and the cadence sensor. They will appear as "WaterRower S4", or sometimes with another local name, usually the computer where the WaterRower is connected to.
+1. Open the Zwift mobile app, e.g. for iOS.
+1. On the computer, open the Zwift app. If necessary, enter your credentials
+and ignore the missing ANT+ dongle warning.
+1. Once you are signed into Zwift, you should see the pairing sensor screen.
+The bluetooth phone next to the ANT+ sign should be pulsing. If has a yellow
+warning or if it's greyed out, ensure your phone is in the same WIFI network
+as the computer and reset bluetooth (switch bluetooth off and back on again).
+1. Find and pair the heart rate monitor, the power meter and the cadence
+sensors called "WaterRower S4". Sometimes the sensors will named after the
+computer where the WaterRower is connected to. **Note** In the past, I've had
+trouble pairing bluetooth devices before starting the ride, so I'd press ESC
+to bypass the pairing screen, and then start the ride with `Just Ride` (or
+join ...). Once in the game, press `A` to get back to the pairing screen. The
+latest versions of the mobile app don't seem to need this step.
 1. Start rowing and enjoy the workout.
-1. Once done, and in order to save the S4 batteries, unplug the USB cable from the Pi, otherwise the WR S4 monitor will not power off.
 
 ## Network Mode
 
-Initially I could not get BLE running on a stable fashion on the RPi, so I created a network mode that allowed me to run just the USB part on the RPi, and the BLE on the same computer where I run Zwift. This is done using UDP multicast. This is still enabled, just in case.
+Initially I could not get BLE running on a stable fashion on the RPi, so I
+created a network mode that allowed me to run just the USB part on the RPi,
+and the BLE on the same computer where I run Zwift. This is done using UDP
+multicast. This is still enabled, just in case.
 
 ### Raspberry Pi (USB)
 
@@ -133,8 +156,8 @@ In the Raspberry PI, check routes:
 netstat -nr
 ```
 
-And create a new route for multicast if it is missing (change gateway address as
-applicable):
+And create a new route for multicast if it is missing (change gateway address
+as applicable):
 
 ```
 sudo route add -net 224.0.0.0/4 gw 192.168.1.1
@@ -161,10 +184,11 @@ We can now start the `usb` side of things on the RPi:
 node main.js usb
 ```
 
-We could also modify the `waterrower.service` file to only do `usb`, so that it would be:
+We could also modify the `waterrower.service` file to only do `usb`, so that
+it would be:
 
 ```
-ExecStart=/usr/local/bin/node main.js
+ExecStart=/usr/local/bin/node main.js usb
 ```
 
 ### BLE peripheral
@@ -184,7 +208,8 @@ cd waterrower-ble
 npm install
 ```
 
-(the installation might fail because of missing native dependencies; sorry, you'll have to work it out).
+(the installation might fail because of missing native dependencies; sorry,
+you'll have to work it out).
 
 You will also need to check routes. On Mac we do this similarly to the Pi:
 
@@ -192,8 +217,8 @@ You will also need to check routes. On Mac we do this similarly to the Pi:
 netstat -nr
 ```
 
-And if missing, we add the route, e.g. to the `en0` interface (oh, and you could add a whole range, I do the IP I need, in this case 224.0.0.1):
-
+And if missing, we add the route, e.g. to the `en0` interface (oh, and you
+could add a whole range, I do the IP I need, in this case 224.0.0.1):
 ```
 sudo route -nv add -net 224.0.0.1 -interface en0
 ```
@@ -206,15 +231,19 @@ node main.js ble
 
 ## Troubleshooting
 
-Things here are a bit fragile, so there are two things we can do to dive into issues: test mode and debug.
+Things here are a bit fragile, so there are two things we can do to dive into
+issues: test mode and debug.
 
-Test mode allows generating data without having to be connected. The way it works is:
+Test mode allows generating data without having to be connected. The way it
+works is:
 
 * `node main.js usb --test` will fake S4 data and send it onto the network.
-* `node main.js ble --test` will fake sensor data, and not listen to the network.
+* `node main.js ble --test` will fake sensor data, and not listen to the
+  network.
 * `node main.js --test` will fake S4 data and not use the network.
 
-We can also use the `DEBUG` environment variable to specify the component to produce debug log output on:
+We can also use the `DEBUG` environment variable to specify the component to
+produce debug log output on:
 
 * `ble`
 * `pm`
@@ -250,3 +279,5 @@ BLE state change: poweredOn
   network [IN] 192.168.1.87:49470 - {"heart_rate":127,"id":1451303405517} +115ms
   network [IN] 192.168.1.87:49470 - {"watts":129,"stroke_count":25,"id":1451303405518} +0ms
 ```
+
+Happy Rowing!
