@@ -38,7 +38,7 @@ var main_usb = function(test_mode) {
 };
 
 var main_full = function(test_mode) {
-  var peripheral = require('bluetooth-peripheral');
+  var peripheral = require('ble-cycling-power');
   var S4 = require('./s4');
   var usb = require('./usb-peripheral');
 
