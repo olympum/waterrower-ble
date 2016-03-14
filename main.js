@@ -19,17 +19,19 @@ var mainUsb = function(callback, testMode) {
 
   var rower = new S4();
   if (testMode) {
-    rower.fakeRower(callback);
+    rower.fakeRower(callback());
   } else {
-    // monitor USB attach and detach
-    var usbPeripheral = new usb.UsbPeripheral();
-    usbPeripheral.monitorWr(rower.startRower(callback), rower.stopRower(rower));
-
     rower.findPort().then(function() {
-      rower.startRower(callback)();
+      rower.startRower(callback())();
     }, function() {
       // wait till we get the right serial
       console.log('[Init] Awaiting WaterRower S4.2 to be connected to USB port');
+
+      // monitor USB attach and detach events
+      var usbPeripheral = new usb.UsbPeripheral();
+      usbPeripheral.monitorWr(function() {
+        rower.startRower(callback());
+      }, rower.stopRower(rower));
     });
   }
 };
@@ -38,27 +40,22 @@ var main = function(args) {
   var runMode = args[2];
   var testMode = args[3] === '--test';
   if (runMode === 'usb') {
-    var broadcaster;
-    var broadcasterNotify = function(event) {
-      if (!broadcaster) {
-        broadcaster = new network.MessageBroadcaster();
-        broadcaster.start();
-      }
+    var broadcasterNotify = function() {
+      var broadcaster = new network.MessageBroadcaster();
+      broadcaster.start();
 
-      broadcaster.send(event);
+      return broadcaster.send;
     };
 
     mainUsb(broadcasterNotify, testMode);
   } else if (runMode === 'ble') {
     mainBle(testMode);
   } else {
-    var ble;
-    var bleNotify = function(event) {
-      if (!ble) {
-        ble = new peripheral.BluetoothPeripheral('WaterRower S4');
-      }
+    var bleNotify = function() {
+      var ble = new peripheral.BluetoothPeripheral('WaterRower S4');
 
-      ble.notify(event);
+      return ble.notify;
+
     };
 
     mainUsb(bleNotify, runMode === '--test');
