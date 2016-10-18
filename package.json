@@ -14,13 +14,14 @@
   ],
   "author": {
     "name": "Bruno Fernandez-Ruiz",
-    "url" : "https://github.com/olympum"
+    "url": "https://github.com/olympum"
   },
   "dependencies": {
+    "ant-cycling-power": "olympum/ant-cycling-power",
     "ble-cycling-power": "olympum/ble-cycling-power",
-    "serialport": "2.0.5",
-    "usb": "1.1.1",
-    "debug": ">=2.2.0",
-    "q": "1.4.1"
+    "debug": "^2.2.0",
+    "q": "^1.4.1",
+    "serialport": "^4.0.3",
+    "usb": "^1.2.0"
   }
 }
