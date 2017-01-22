@@ -138,8 +138,7 @@ function S4() {
     var memoryMap = {
         "1A9": ["stroke_rate", "S"],
         "140": ["stroke_count", "D"],
-        "088": ["watts", "D"],
-        "1A0": ["heart_rate", "D"]
+        "088": ["watts", "D"]
     };
 
     this.strokeStartHandler = function () {
@@ -305,8 +304,6 @@ S4.prototype.startRower = function(callback) {
               if (event.watts > 0) {
                 watts = event.watts;
               }
-            } else if ('heart_rate' in event) {
-              callback(event);
             }
         });
       });
@@ -328,8 +325,6 @@ S4.prototype.fakeRower = function(callback) {
   var stroke_count = 0;
   var id = 0;
   var test = function() {
-    var bpm = Math.floor(Math.random() * 10 + 120);
-    callback({'heart_rate': bpm});
     var watts = Math.floor(Math.random() * 10 + 120);
     stroke_count = stroke_count + 1;
     callback({'watts': watts, 'rev_count': stroke_count});
