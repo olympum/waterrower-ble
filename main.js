@@ -76,14 +76,32 @@ var main = function(args) {
     mainUsb(antNotify, testMode);
 
   } else {
-    var bleNotify = function() {
+    var listener = function() {
       var ble = new peripheral.BluetoothPeripheral('WaterRower S4');
-
-      return ble.notify;
+      var ant = require('ant-cycling-power');
+      var pm = new ant.PowerMeter();
+      var ts = 0;
+      var rev_count = 0;
+      return function(event) {
+        if ("watts" in event) {
+          if (ts == 0) {
+            ts = Date.now();
+          } else {
+            var now = Date.now();
+            var delta = (now - ts) / 1000 / 60;
+            ts = now;
+            var revs = event.rev_count - rev_count;
+            rev_count = event.rev_count;
+            var cadence = Math.round(revs / delta);
+            pm.broadcast(event.watts, cadence);
+            ble.notify(event);
+          }
+        }
+      };
 
     };
 
-    mainUsb(bleNotify, runMode === '--test');
+    mainUsb(listener, runMode === '--test');
   }
 };
 
