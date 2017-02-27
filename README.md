@@ -8,7 +8,7 @@ or simply to just record the power, cadence and heart rate data, e.g.
 in the Wahoo Fitness app.
 
 You can read the [blog
-post](http://www.olympum.com/sports/rowing-with-waterrower-in-zwift/) for
+post](http://www.olympum.com/sports/rowing-with-waterrower-in-zwift) for
 context.
 
 **B$ disclaimer: this code is just a quick Friday afternoon hack with a bunch
